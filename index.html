@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Profile Tester | voidAasif</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --container-bg: #161616;
+            --accent: #3b82f6;
+            /* Transform Variables */
+            --zoom: 1;
+            --rotate: 0deg;
+            --moveX: 0px;
+            --moveY: 0px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex: 1; /* Pushes footer down */
+        }
+
+        /* Sidebar Controls */
+        .controls {
+            background: var(--container-bg);
+            padding: 25px;
+            border-radius: 16px;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #222;
+        }
+
+        .control-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        select, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #222;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        /* Preview Stage */
+        .preview-container {
+            flex: 1;
+            min-width: 350px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            position: relative;
+            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .profile-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        #profileImg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: 
+                scale(var(--zoom)) 
+                rotate(var(--rotate)) 
+                translate(var(--moveX), var(--moveY));
+            transition: transform 0.1s ease-out;
+        }
+
+        .platform-tag {
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .reset-btn {
+            background: #222;
+            color: #ccc;
+            border: 1px solid #333;
+            padding: 10px;
+            width: 100%;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .reset-btn:hover { 
+            background: #cc3333; 
+            color: white;
+            border-color: #ff4444;
+        }
+
+        /* Footer / Credits */
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #222;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .credits {
+            font-size: 14px;
+            color: #555;
+            letter-spacing: 0.5px;
+        }
+
+        .credits a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .credits a:hover {
+            color: #60a5fa;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .username {
+            color: #eee;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="margin-bottom: 30px; font-weight: 300; letter-spacing: 2px;">PROFILE <span style="font-weight: 800; color: var(--accent);">TESTER</span></h2>
+
+    <div class="main-layout">
+        <div class="controls">
+            <div class="control-group">
+                <label>Upload Image</label>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+
+            <div class="control-group">
+                <label>Zoom</label>
+                <input type="range" id="zoomRange" min="0.5" max="3" step="0.05" value="1">
+            </div>
+
+            <div class="control-group">
+                <label>Rotation</label>
+                <input type="range" id="rotateRange" min="-180" max="180" step="1" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>Horizontal Offset</label>
+                <input type="range" id="moveXRange" min="-150" max="150" step="1" value="0">
+            </div>
+
+            <div class="control-group">
+                <label>Vertical Offset</label>
+                <input type="range" id="moveYRange" min="-150" max="150" step="1" value="0">
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #222; margin: 20px 0;">
+
+            <div class="control-group">
+                <label>App Environment</label>
+                <select id="platformSelect">
+                    <option value="instagram">Instagram</option>
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="gmail">Gmail / Google</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="twitter">X (Twitter)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>UI Theme</label>
+                <select id="themeSelect">
+                    <option value="dark">Dark Mode</option>
+                    <option value="light">Light Mode</option>
+                </select>
+            </div>
+
+            <button class="reset-btn" onclick="resetAdjustments()">RESET POSITIONS</button>
+        </div>
+
+        <div class="preview-container" id="previewStage">
+            <div class="profile-circle">
+                <img src="https://via.placeholder.com/400?text=Select+DP" id="profileImg">
+            </div>
+            <div class="platform-tag" id="platformName">Instagram</div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="credits">
+            Developed by <span class="username">
+            <a href="https://github.com/voidAasif" target="_blank">voidAasif</a>
+            </span> | 
+            <a href="https://voidaasif.github.io/aasif/" target="_blank">View Portfolio</a>
+        </div>
+    </footer>
+
+    <script>
+        const img = document.getElementById('profileImg');
+        const stage = document.getElementById('previewStage');
+        const pName = document.getElementById('platformName');
+
+        const themes = {
+            instagram: { dark: '#000000', light: '#ffffff', textD: '#fff', textL: '#000' },
+            whatsapp: { dark: '#0b141a', light: '#ffffff', textD: '#e9edef', textL: '#111b21' },
+            gmail: { dark: '#202124', light: '#f1f3f4', textD: '#e8eaed', textL: '#3c4043' },
+            facebook: { dark: '#18191a', light: '#f0f2f5', textD: '#e4e6eb', textL: '#050505' },
+            linkedin: { dark: '#1d2226', light: '#ffffff', textD: '#fff', textL: '#000000' },
+            twitter: { dark: '#000000', light: '#ffffff', textD: '#fff', textL: '#0f1419' }
+        };
+
+        function updateTransform() {
+            document.documentElement.style.setProperty('--zoom', document.getElementById('zoomRange').value);
+            document.documentElement.style.setProperty('--rotate', document.getElementById('rotateRange').value + 'deg');
+            document.documentElement.style.setProperty('--moveX', document.getElementById('moveXRange').value + 'px');
+            document.documentElement.style.setProperty('--moveY', document.getElementById('moveYRange').value + 'px');
+        }
+
+        function updatePlatform() {
+            const p = document.getElementById('platformSelect').value;
+            const t = document.getElementById('themeSelect').value;
+            const colors = themes[p];
+            
+            stage.style.backgroundColor = (t === 'dark') ? colors.dark : colors.light;
+            pName.style.color = (t === 'dark') ? colors.textD : colors.textL;
+            pName.innerText = p.charAt(0).toUpperCase() + p.slice(1);
+        }
+
+        function resetAdjustments() {
+            document.getElementById('zoomRange').value = 1;
+            document.getElementById('rotateRange').value = 0;
+            document.getElementById('moveXRange').value = 0;
+            document.getElementById('moveYRange').value = 0;
+            updateTransform();
+        }
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            if (e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (event) => { img.src = event.target.result; };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        ['zoomRange', 'rotateRange', 'moveXRange', 'moveYRange'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateTransform);
+        });
+
+        ['platformSelect', 'themeSelect'].forEach(id => {
+            document.getElementById(id).addEventListener('change', updatePlatform);
+        });
+
+        updatePlatform();
+    </script>
+</body>
+</html>
